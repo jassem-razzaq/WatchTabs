@@ -5,7 +5,9 @@ function Movie() {
     <div className="movie">
       <div className="movie-cont">Movie 1</div>
       <div className="movie-button-cont">
-        <button className="movie-button"></button>
+        <button className="movie-button">
+          <i class="fa-regular fa-trash-can"></i>
+        </button>
         <button className="movie-button"></button>
         <button className="movie-button"></button>
       </div>

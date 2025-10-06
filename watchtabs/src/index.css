@@ -75,6 +75,7 @@
 .movie-button {
   width: 25px;
   height: 20px;
+  padding: 0;
 }
 
 .movie-cont {
