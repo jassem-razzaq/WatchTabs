@@ -3,9 +3,12 @@ import { useState } from "react";
 function Movie() {
   return (
     <div className="movie">
-      Movie 1<button className="movie-button"></button>
-      <button className="movie-button"></button>
-      <button className="movie-button"></button>
+      <div className="movie-cont">Movie 1</div>
+      <div className="movie-button-cont">
+        <button className="movie-button"></button>
+        <button className="movie-button"></button>
+        <button className="movie-button"></button>
+      </div>
     </div>
   );
 }
@@ -13,7 +16,7 @@ function Movie() {
 function MovieList() {
   return (
     <div className="movie-list">
-      <ol>
+      <ol className="list-element">
         <Movie />
         <Movie />
         <Movie />

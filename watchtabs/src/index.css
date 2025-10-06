@@ -25,6 +25,7 @@
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin-right: 10px;
 }
 .CSV:hover,
 .TMDB:hover {
@@ -32,21 +33,38 @@
 }
 
 .CSV:focus,
-.CSV:focus-visible .TMDB:focus,
+.CSV:focus-visible,
+.TMDB:focus,
 .TMDB:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.list-element {
+  margin: 0px;
+  padding: 0px;
+}
 .movie-list {
   width: 300px;
   background-color: grey;
+  border-color: #1a1a1a;
+  border-width: 3px;
 }
 
 .movie {
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-color: #1a1a1a;
   border-width: 3px;
 }
 .movie-button {
   width: 25px;
   height: 20px;
+}
+
+.movie-cont {
+}
+
+.movie-buttons-cont {
 }
