@@ -76,6 +76,12 @@
   width: 25px;
   height: 20px;
   padding: 0;
+  background-color: grey;
+  border: none;
+}
+
+.movie-button:hover {
+  cursor: pointer;
 }
 
 .movie-cont {
