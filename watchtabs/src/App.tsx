@@ -8,7 +8,6 @@ function Movie() {
         <button className="movie-button">
           <i class="fa-regular fa-clone"></i>
         </button>
-        <button className="movie-button"></button>
         <button className="movie-button">
           <i class="fa-regular fa-trash-can"></i>
         </button>
