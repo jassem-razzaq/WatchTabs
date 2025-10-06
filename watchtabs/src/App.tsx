@@ -20,6 +20,15 @@ function MovieList() {
         <Movie />
         <Movie />
         <Movie />
+        <Movie />
+        <Movie />
+        <Movie />
+        <Movie />
+        <Movie />
+        <Movie />
+        <Movie />
+        <Movie />
+        <Movie />
       </ol>
     </div>
   );
@@ -28,9 +37,13 @@ function MovieList() {
 function App() {
   return (
     <>
-      <MovieList />
-      <button className="CSV">CSV</button>
-      <button className="TMDB">TMDB</button>
+      <div className="extension-cont">
+        <MovieList />
+        <div className="export-cont">
+          <button className="CSV">CSV</button>
+          <button className="TMDB">TMDB</button>
+        </div>
+      </div>
     </>
   );
 }

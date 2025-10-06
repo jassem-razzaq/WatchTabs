@@ -13,6 +13,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.extension-cont {
+  max-width: 300px;
+}
+
+.export-cont {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .CSV,
 .TMDB {
   color: white;
@@ -44,10 +54,14 @@
   padding: 0px;
 }
 .movie-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
   width: 300px;
   background-color: grey;
   border-color: #1a1a1a;
   border-width: 3px;
+  margin-bottom: 15px;
 }
 
 .movie {
