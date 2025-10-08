@@ -73,6 +73,7 @@
   border: 1px solid black;
   transition: border-color 0.25s;
   background-color: #1a1a1a;
+  cursor: default;
 }
 .movie-element:hover {
   border-color: #646cff;
