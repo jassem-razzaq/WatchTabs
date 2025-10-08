@@ -17,6 +17,10 @@
   max-width: 500px;
 }
 
+.list-heading {
+  font: 15px Arial;
+}
+
 .export-cont {
   display: flex;
   justify-content: space-around;
@@ -61,6 +65,7 @@
 }
 
 .movie-element {
+  font-size: 13px;
   text-align: left;
   display: flex;
   justify-content: space-between;

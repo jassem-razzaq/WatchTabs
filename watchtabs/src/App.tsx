@@ -1,5 +1,10 @@
 import { useState, type ReactElement } from "react";
 
+function TitleGrabber() {
+  let titles: string[] = [];
+  console.log(browser.tabs.query(Title));
+}
+
 function Movie() {
   // Get list of movies from tabs in array
   const movieArr: string[] = [
@@ -50,6 +55,7 @@ function App() {
   return (
     <>
       <div className="extension-cont">
+        <h1 className="list-heading">Movies detected in current window</h1>
         <MovieList />
         <div className="export-cont">
           <button className="CSV">CSV</button>
