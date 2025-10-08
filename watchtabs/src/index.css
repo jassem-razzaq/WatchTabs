@@ -14,7 +14,7 @@
 }
 
 .extension-cont {
-  max-width: 300px;
+  max-width: 500px;
 }
 
 .export-cont {
@@ -57,20 +57,17 @@
   max-height: 200px;
   overflow-y: auto;
   padding: 10px;
-  width: 300px;
-  background-color: grey;
-  border-color: #1a1a1a;
-  border-width: 3px;
   margin-bottom: 15px;
+  background-color: purple;
 }
 
-.movie {
+.movie-element {
   text-align: left;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-color: #1a1a1a;
-  border-width: 3px;
+  border: 1px solid black;
+  background-color: #1a1a1a;
 }
 .movie-button {
   width: 25px;
