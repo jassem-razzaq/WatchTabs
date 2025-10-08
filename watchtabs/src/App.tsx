@@ -3,7 +3,7 @@ import { useState, type ReactElement } from "react";
 function Movie() {
   // Get list of movies from tabs in array
   const movieArr: string[] = [
-    "The Matrix (1999)",
+    "Night of the Day of the Dawn of the Son of the Bride of the Return of the Revenge of the Terror of the Attack of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid (2005)",
     "The Shawshank Redemption (1999)",
     "3 Idiots (2017)",
     "The Matrix (1999)",
@@ -20,26 +20,20 @@ function Movie() {
     "3 Idiots (2017)",
   ];
 
-  // Create output array of list elements
-  let resultArr: ReactElement[] = [];
-
-  // Loop over movies array and create list elements
-  for (let i = 0; i < movieArr.length; i++) {
-    resultArr.push(
-      <div className="movie">
-        <div className="movie-cont">{movieArr[i]}</div>
-        <div className="movie-button-cont">
-          <button className="movie-button">
-            <i className="fa-regular fa-clone"></i>
-          </button>
-          <button className="movie-button">
-            <i className="fa-regular fa-trash-can"></i>
-          </button>
-        </div>
+  // Return list elements with key as index
+  return movieArr.map((title: string, index: number) => (
+    <li key={index} className="movie-element">
+      <div className="movie-title">{title}</div>
+      <div className="movie-button-cont">
+        <button className="movie-button">
+          <i className="fa-regular fa-clone"></i>
+        </button>
+        <button className="movie-button">
+          <i className="fa-regular fa-trash-can"></i>
+        </button>
       </div>
-    );
-  }
-  return resultArr;
+    </li>
+  ));
 }
 
 function MovieList() {
