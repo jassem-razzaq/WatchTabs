@@ -1,9 +1,19 @@
-import { useState, type ReactElement } from "react";
+//import { useState, type ReactElement } from "react";
+// import browser from "webextension-polyfill";
 
-function TitleGrabber() {
-  let titles: string[] = [];
-  console.log(browser.tabs.query(Title));
-}
+// function TitleGrabber() {
+//   function logTabs(tabs: browser.Tabs.Tab) {
+//     for (const tab of tabs) {
+//       console.log(tab.title);
+//     }
+//   }
+
+//   function onError(error: unknown) {
+//     console.error(`Error: ${error}`);
+//   }
+
+//   return browser.tabs.query({}).then(logTabs, onError);
+// }
 
 function Movie() {
   // Get list of movies from tabs in array
