@@ -3,5 +3,8 @@
   "name": "WatchTabs",
   "version": "1.0",
   "description": "Covert your tabs to a watchlist",
-  "permissions": ["tabs"]
+  "permissions": ["tabs"],
+  "action": {
+    "default_popup": "index.html"
+  }
 }

@@ -14,7 +14,7 @@
 }
 
 .extension-cont {
-  max-width: 500px;
+  min-width: 500px;
 }
 
 .list-heading {
