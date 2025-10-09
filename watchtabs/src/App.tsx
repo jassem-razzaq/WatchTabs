@@ -1,4 +1,5 @@
 ///////////////////////////////////////////////
+// GOALS
 // 1. Two views, one for current window only, one for all windows
 // 2. Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
 // 3. Mark tabs in list with colours based on which website detected from (yellow imdb, green letterboxd, etc.)
@@ -14,6 +15,9 @@
 //import { useState, type ReactElement } from "react";
 import browser from "webextension-polyfill";
 
+// Year regex
+const yearRe: RegExp = /(\([0-9]{4}\))$/g;
+
 interface Movie {
   name: string;
   year: number;
@@ -22,23 +26,22 @@ interface Movie {
 
 // add options for current window or all windows
 function TitleGrabber() {
-  let movieArr: Movie[] = [];
+  //let movieArr: Movie[] = [];
+
   function logTabs(tabs: browser.Tabs.Tab[]) {
     for (const tab of tabs) {
-      const tabTitle: string = tab.title!;
-      const tabID: number = tab.id!;
-      for (let i = 0; i < tabTitle.length; i++){
-        if (tabTitle[i+1] === "(") {
-          const title: string = tabTitle.substring(0,i);
-          const year_idx: number = i+2;
-        }
-        if (tabTitle[i+1])
+      const yearMatch: RegExpMatchArray | null | undefined =
+        tab.title?.match(yearRe);
+      if (yearMatch) {
+        const year = Number(yearMatch[0].slice(1, -1));
+      } else {
+        console.log("year not found!");
       }
-        let movie: Movie = {
-          name: tab.title!,
-          tabID: tab.id!,
-        };
-      movieArr.push(movie);
+      // let movie: Movie = {
+      //   name: tab.title!,
+      //   tabID: tab.id!,
+      // };
+      // movieArr.push(movie);
       console.log(tab.title);
     }
   }
