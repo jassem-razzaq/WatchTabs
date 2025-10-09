@@ -1,11 +1,45 @@
+///////////////////////////////////////////////
+// 1. Two views, one for current window only, one for all windows
+// 2. Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
+// 3. Mark tabs in list with colours based on which website detected from (yellow imdb, green letterboxd, etc.)
+// 4. Able to save a watchlist in browser storage
+// 5. Export watchlist to CSV with movie links
+// 6. Implement OAuth to sign in to TMDB
+// 7. Use TMDB API to create TMDB Watchlist!
+
+// ISSUES:
+// 1. Not opening on Firefox
+//////////////////////////////////////////////
+
 //import { useState, type ReactElement } from "react";
 import browser from "webextension-polyfill";
 
+interface Movie {
+  name: string;
+  year: number;
+  tabID: number;
+}
+
+// add options for current window or all windows
 function TitleGrabber() {
+  let movieArr: Movie[] = [];
   function logTabs(tabs: browser.Tabs.Tab[]) {
     for (const tab of tabs) {
-      // tab.url requires the `tabs` permission or a matching host permission.
-      console.log(tab.url);
+      const tabTitle: string = tab.title!;
+      const tabID: number = tab.id!;
+      for (let i = 0; i < tabTitle.length; i++){
+        if (tabTitle[i+1] === "(") {
+          const title: string = tabTitle.substring(0,i);
+          const year_idx: number = i+2;
+        }
+        if (tabTitle[i+1])
+      }
+        let movie: Movie = {
+          name: tab.title!,
+          tabID: tab.id!,
+        };
+      movieArr.push(movie);
+      console.log(tab.title);
     }
   }
 
@@ -13,7 +47,7 @@ function TitleGrabber() {
     console.error(`Error: ${error}`);
   }
 
-  return browser.tabs.query({}).then(logTabs, onError);
+  return browser.tabs.query({ currentWindow: true }).then(logTabs, onError);
 }
 
 function Movie() {
