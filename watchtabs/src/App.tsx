@@ -19,31 +19,40 @@ import browser from "webextension-polyfill";
 const yearRe: RegExp = /(\([0-9]{4}\))$/g;
 
 interface Movie {
-  name: string;
-  year: number;
-  tabID: number;
+  name: string | undefined;
+  year: number | undefined;
+  tabID: number | undefined;
 }
 
 // add options for current window or all windows
 function TitleGrabber() {
-  //let movieArr: Movie[] = [];
+  const movieArr: Movie[] = [];
 
   function logTabs(tabs: browser.Tabs.Tab[]) {
     for (const tab of tabs) {
+      if (tab === undefined) {
+        continue;
+      }
+
+      const movie: Movie = {
+        name: undefined,
+        year: undefined,
+        tabID: tab.id,
+      };
+
       const yearMatch: RegExpMatchArray | null | undefined =
         tab.title?.match(yearRe);
       if (yearMatch) {
-        const year = Number(yearMatch[0].slice(1, -1));
+        console.log("Match!");
+        movie.year = Number(yearMatch[0].slice(1, -1));
+        movie.name = tab.title?.slice(0, tab.title.length - yearMatch.length);
       } else {
         console.log("year not found!");
       }
-      // let movie: Movie = {
-      //   name: tab.title!,
-      //   tabID: tab.id!,
-      // };
-      // movieArr.push(movie);
+      movieArr.push(movie);
       console.log(tab.title);
     }
+    console.log(movieArr);
   }
 
   function onError(error: unknown) {
