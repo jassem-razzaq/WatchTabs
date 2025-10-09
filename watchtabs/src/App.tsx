@@ -42,7 +42,9 @@ function Movie() {
       <div className="movie-title">{title}</div>
       <div className="movie-button-cont">
         <button className="movie-button"></button>
-        <button className="movie-button"></button>
+        <button className="movie-button">
+          <img className="del-ico" src="del.svg" />
+        </button>
       </div>
     </li>
   ));
