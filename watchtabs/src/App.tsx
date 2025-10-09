@@ -1,19 +1,20 @@
 //import { useState, type ReactElement } from "react";
-// import browser from "webextension-polyfill";
+import browser from "webextension-polyfill";
 
-// function TitleGrabber() {
-//   function logTabs(tabs: browser.Tabs.Tab) {
-//     for (const tab of tabs) {
-//       console.log(tab.title);
-//     }
-//   }
+function TitleGrabber() {
+  function logTabs(tabs: browser.Tabs.Tab[]) {
+    for (const tab of tabs) {
+      // tab.url requires the `tabs` permission or a matching host permission.
+      console.log(tab.url);
+    }
+  }
 
-//   function onError(error: unknown) {
-//     console.error(`Error: ${error}`);
-//   }
+  function onError(error: unknown) {
+    console.error(`Error: ${error}`);
+  }
 
-//   return browser.tabs.query({}).then(logTabs, onError);
-// }
+  return browser.tabs.query({}).then(logTabs, onError);
+}
 
 function Movie() {
   // Get list of movies from tabs in array
@@ -40,12 +41,8 @@ function Movie() {
     <li key={index} className="movie-element">
       <div className="movie-title">{title}</div>
       <div className="movie-button-cont">
-        <button className="movie-button">
-          <i className="fa-regular fa-clone"></i>
-        </button>
-        <button className="movie-button">
-          <i className="fa-regular fa-trash-can"></i>
-        </button>
+        <button className="movie-button"></button>
+        <button className="movie-button"></button>
       </div>
     </li>
   ));
@@ -68,7 +65,9 @@ function App() {
         <h1 className="list-heading">Movies detected in current window</h1>
         <MovieList />
         <div className="export-cont">
-          <button className="CSV">CSV</button>
+          <button className="CSV" onClick={TitleGrabber}>
+            CSV
+          </button>
           <button className="TMDB">TMDB</button>
         </div>
       </div>
