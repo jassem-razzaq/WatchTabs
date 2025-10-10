@@ -1,13 +1,15 @@
 ///////////////////////////////////////////////
 // GOALS
-// 1. Two views, one for current window only, one for all windows
-// 2. Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
-// 3. Mark tabs in list with colours based on which website detected from (yellow imdb, green letterboxd, etc.)
-// 4. Able to save a watchlist in browser storage
-// 5. Export watchlist to CSV with movie links
-// 6. Implement OAuth to sign in to TMDB
-// 7. Use TMDB API to create TMDB Watchlist!
-// 8. Expand to series, anime etc.
+// -- Display extracted movie data in exension link
+// -- Enable movie list item buttons (delete, open in new tab, select, click and drag)
+// -- Two views, one for current window only, one for all windows
+// -- Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
+// -- Mark tabs in list with colours based on which website detected from (yellow imdb, green letterboxd, etc.)
+// -- Able to save a watchlist in browser storage
+// -- Export watchlist to CSV with movie links
+// -- Implement OAuth to sign in to TMDB
+// -- Use TMDB API to create TMDB Watchlist!
+// -- Expand to series, anime etc.
 
 // ISSUES:
 // 1. Not opening on Firefox -- FIXED (just works)
@@ -29,8 +31,8 @@ interface Movie {
 }
 
 // add options for current window or all windows
-function TitleGrabber() {
-  const movieArr: Movie[] = [];
+async function titleGrabber() {
+  const titleMovieObjArr: Movie[] = [];
 
   function logTabs(tabs: browser.Tabs.Tab[]) {
     for (const tab of tabs) {
@@ -50,8 +52,6 @@ function TitleGrabber() {
 
           // Extract year
           if (yearMatch) {
-            console.log("Match!");
-            console.log(yearMatch);
             movie.year = Number(yearMatch[0].slice(1, -1).trim());
           } else {
             console.log("year not found!");
@@ -69,40 +69,51 @@ function TitleGrabber() {
           if (tab.id) {
             movie.tabID = tab.id;
           }
-          movieArr.push(movie);
-          console.log(tab.title);
+          titleMovieObjArr.push(movie);
         }
       }
     }
-    console.log(movieArr);
+    //console.log(movieArr);
   }
 
   function onError(error: unknown) {
     console.error(`Error: ${error}`);
   }
 
-  return browser.tabs.query({ currentWindow: true }).then(logTabs, onError);
+  try {
+    const tabs = await browser.tabs.query({ currentWindow: true });
+    logTabs(tabs);
+  } catch (error) {
+    onError(error);
+  }
+  return titleMovieObjArr;
 }
 
+const movieObjArr: Movie[] = await titleGrabber();
+const movieArr: string[] = movieObjArr.map((movie) => movie.name);
+
+console.log("raw movies data", movieObjArr);
+console.log("extracted movie names", movieArr);
+
 function Movie() {
-  // Get list of movies from tabs in array
-  const movieArr: string[] = [
-    "Night of the Day of the Dawn of the Son of the Bride of the Return of the Revenge of the Terror of the Attack of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid (2005)",
-    "The Shawshank Redemption (1999)",
-    "3 Idiots (2017)",
-    "The Matrix (1999)",
-    "The Shawshank Redemption (1999)",
-    "3 Idiots (2017)",
-    "The Matrix (1999)",
-    "The Shawshank Redemption (1999)",
-    "3 Idiots (2017)",
-    "The Matrix (1999)",
-    "The Shawshank Redemption (1999)",
-    "3 Idiots (2017)",
-    "The Matrix (1999)",
-    "The Shawshank Redemption (1999)",
-    "3 Idiots (2017)",
-  ];
+  console.log(movieArr);
+  // const movieArr: string[] = [
+  //   "Night of the Day of the Dawn of the Son of the Bride of the Return of the Revenge of the Terror of the Attack of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid (2005)",
+  //   "The Shawshank Redemption (1999)",
+  //   "3 Idiots (2017)",
+  //   "The Matrix (1999)",
+  //   "The Shawshank Redemption (1999)",
+  //   "3 Idiots (2017)",
+  //   "The Matrix (1999)",
+  //   "The Shawshank Redemption (1999)",
+  //   "3 Idiots (2017)",
+  //   "The Matrix (1999)",
+  //   "The Shawshank Redemption (1999)",
+  //   "3 Idiots (2017)",
+  //   "The Matrix (1999)",
+  //   "The Shawshank Redemption (1999)",
+  //   "3 Idiots (2017)",
+  // ];
 
   // Return list elements with key as index
   return movieArr.map((title: string, index: number) => (
@@ -135,9 +146,7 @@ function App() {
         <h1 className="list-heading">Movies detected in current window</h1>
         <MovieList />
         <div className="export-cont">
-          <button className="CSV" onClick={TitleGrabber}>
-            CSV
-          </button>
+          <button className="CSV">CSV</button>
           <button className="TMDB">TMDB</button>
         </div>
       </div>
