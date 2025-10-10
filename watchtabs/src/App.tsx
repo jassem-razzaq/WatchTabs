@@ -16,12 +16,13 @@
 import browser from "webextension-polyfill";
 
 // Year regex
-const yearRe: RegExp = /(\([0-9]{4}\))$/g;
+const yearRe: RegExp = /(\([0-9]{4}\))/g;
+const trimRe: RegExp = /(\([0-9]{4}\)).*/g;
 
 interface Movie {
-  name: string | undefined;
-  year: number | undefined;
-  tabID: number | undefined;
+  name: string;
+  year: number;
+  tabID: number;
 }
 
 // add options for current window or all windows
@@ -35,19 +36,37 @@ function TitleGrabber() {
       }
 
       const movie: Movie = {
-        name: undefined,
-        year: undefined,
-        tabID: tab.id,
+        name: "Blank",
+        year: 0,
+        tabID: 999,
       };
 
-      const yearMatch: RegExpMatchArray | null | undefined =
-        tab.title?.match(yearRe);
-      if (yearMatch) {
-        console.log("Match!");
-        movie.year = Number(yearMatch[0].slice(1, -1));
-        movie.name = tab.title?.slice(0, tab.title.length - yearMatch.length);
-      } else {
-        console.log("year not found!");
+      if (tab.title) {
+        // Regex match for year
+        const yearMatch: RegExpMatchArray | null = tab.title?.match(yearRe);
+        const trimMatch: RegExpMatchArray | null = tab.title?.match(trimRe);
+
+        // Extract year
+        if (yearMatch) {
+          console.log("Match!");
+          console.log(yearMatch);
+          movie.year = Number(yearMatch[0].slice(1, -1));
+        } else {
+          console.log("year not found!");
+        }
+        // Extract title
+        if (trimMatch) {
+          movie.name = tab.title?.slice(
+            0,
+            tab.title.length - trimMatch[0].length
+          );
+        } else {
+          movie.name = tab.title;
+        }
+      }
+      // Extract tab id
+      if (tab.id) {
+        movie.tabID = tab.id;
       }
       movieArr.push(movie);
       console.log(tab.title);
