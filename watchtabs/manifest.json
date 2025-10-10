@@ -4,6 +4,10 @@
   "version": "1.0",
   "description": "Covert your tabs to a watchlist",
   "permissions": ["tabs"],
+  "background": {
+    "scripts": ["browser-polyfill.js", "background.js"],
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "index.html"
   }

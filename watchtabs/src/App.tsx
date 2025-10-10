@@ -9,7 +9,7 @@
 // 7. Use TMDB API to create TMDB Watchlist!
 
 // ISSUES:
-// 1. Not opening on Firefox
+// 1. Not opening on Firefox -- FIXED (just works)
 //////////////////////////////////////////////
 
 //import { useState, type ReactElement } from "react";
