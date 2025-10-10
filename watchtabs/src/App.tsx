@@ -1,5 +1,6 @@
 ///////////////////////////////////////////////
 // GOALS
+// -- Seperate handler for each movie link type (IMDB etc.)
 // -- Display extracted movie data in exension link
 // -- Enable movie list item buttons (delete, open in new tab, select, click and drag)
 // -- Two views, one for current window only, one for all windows
