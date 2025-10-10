@@ -7,6 +7,7 @@
 // 5. Export watchlist to CSV with movie links
 // 6. Implement OAuth to sign in to TMDB
 // 7. Use TMDB API to create TMDB Watchlist!
+// 8. Expand to series, anime etc.
 
 // ISSUES:
 // 1. Not opening on Firefox -- FIXED (just works)
@@ -15,9 +16,11 @@
 //import { useState, type ReactElement } from "react";
 import browser from "webextension-polyfill";
 
-// Year regex
+// Regex
 const yearRe: RegExp = /(\([0-9]{4}\))/g;
 const trimRe: RegExp = /(\([0-9]{4}\)).*/g;
+const linkRe: RegExp =
+  /(imdb\.com\/title)|(letterboxd\.com\/film)|(rottentomatoes\.com\/m)|(flickfocus\.com\/movies)|(themoviedb\.org\/movie\/)/g;
 
 interface Movie {
   name: string;
@@ -31,45 +34,45 @@ function TitleGrabber() {
 
   function logTabs(tabs: browser.Tabs.Tab[]) {
     for (const tab of tabs) {
-      if (tab === undefined) {
-        continue;
-      }
+      if (tab.url && tab.title) {
+        // Check for movie url
+        const linkMatch = tab.url.match(linkRe);
+        if (linkMatch) {
+          const movie: Movie = {
+            name: "Not Found",
+            year: 0,
+            tabID: 0,
+          };
 
-      const movie: Movie = {
-        name: "Blank",
-        year: 0,
-        tabID: 999,
-      };
+          // Regex match for year and trim length for title
+          const yearMatch: RegExpMatchArray | null = tab.title?.match(yearRe);
+          const trimMatch: RegExpMatchArray | null = tab.title?.match(trimRe);
 
-      if (tab.title) {
-        // Regex match for year
-        const yearMatch: RegExpMatchArray | null = tab.title?.match(yearRe);
-        const trimMatch: RegExpMatchArray | null = tab.title?.match(trimRe);
+          // Extract year
+          if (yearMatch) {
+            console.log("Match!");
+            console.log(yearMatch);
+            movie.year = Number(yearMatch[0].slice(1, -1).trim());
+          } else {
+            console.log("year not found!");
+          }
+          // Extract title
+          if (trimMatch) {
+            movie.name = tab.title
+              ?.slice(0, tab.title.length - trimMatch[0].length)
+              .trim();
+          } else {
+            movie.name = tab.title;
+          }
 
-        // Extract year
-        if (yearMatch) {
-          console.log("Match!");
-          console.log(yearMatch);
-          movie.year = Number(yearMatch[0].slice(1, -1));
-        } else {
-          console.log("year not found!");
+          // Extract tab id
+          if (tab.id) {
+            movie.tabID = tab.id;
+          }
+          movieArr.push(movie);
+          console.log(tab.title);
         }
-        // Extract title
-        if (trimMatch) {
-          movie.name = tab.title?.slice(
-            0,
-            tab.title.length - trimMatch[0].length
-          );
-        } else {
-          movie.name = tab.title;
-        }
       }
-      // Extract tab id
-      if (tab.id) {
-        movie.tabID = tab.id;
-      }
-      movieArr.push(movie);
-      console.log(tab.title);
     }
     console.log(movieArr);
   }
