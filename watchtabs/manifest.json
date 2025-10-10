@@ -3,17 +3,7 @@
   "name": "WatchTabs",
   "version": "1.0",
   "description": "Covert your tabs to a watchlist",
-  "icon": [
-    {
-      "src": "icon.png",
-      "sizes": "48x48"
-    }
-  ],
   "permissions": ["tabs"],
-  "background": {
-    "scripts": ["browser-polyfill.js", "background.js"],
-    "service_worker": "background.js"
-  },
   "action": {
     "default_popup": "index.html"
   }
