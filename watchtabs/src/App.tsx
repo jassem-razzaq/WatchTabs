@@ -28,6 +28,7 @@ const linkRe: RegExp =
 interface Movie {
   name: string;
   year: number;
+  link: string;
   tabID: number;
 }
 
@@ -44,6 +45,7 @@ async function titleGrabber() {
           const movie: Movie = {
             name: "Not Found",
             year: 0,
+            link: "",
             tabID: 0,
           };
 
@@ -65,7 +67,8 @@ async function titleGrabber() {
           } else {
             movie.name = tab.title;
           }
-
+          // Extract url
+          movie.link = tab.url;
           // Extract tab id
           if (tab.id) {
             movie.tabID = tab.id;
@@ -94,6 +97,10 @@ const movieArr: string[] = movieObjArr.map(
   (movie) => movie.name + " (" + movie.year.toString() + ")"
 );
 
+// function newTabHandler(idx: number) {
+//   console.log(movieObjArr[idx].link);
+// }
+
 function Movie() {
   // Return list elements with key as index
   return movieArr.map((title: string, index: number) => (
@@ -104,7 +111,10 @@ function Movie() {
           <img className="exp-ico" src="expand.png" />
         </button>
         <button className="movie-button"></button>
-        <button className="movie-button">
+        <button
+          className="movie-button"
+          onClick={() => console.log(movieObjArr[index].link)}
+        >
           <img className="open-ico" src="open.png" />
         </button>
         <button className="movie-button">
