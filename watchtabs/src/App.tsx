@@ -2,7 +2,7 @@
 // GOALS
 // -- Seperate handler for each movie link type (IMDB etc.)
 // -- Display extracted movie data in extension list -- DONE
-// -- Enable movie list item buttons (delete, open in new tab, select, click and drag)
+// -- Enable movie list item buttons (delete, open in new tab -- DONE, select, click and drag)
 // -- Two views, one for current window only, one for all windows
 // -- Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
 // -- Mark tabs in list with colours based on which website detected from (yellow imdb, green letterboxd, etc.)
@@ -125,7 +125,10 @@ function Movie() {
         >
           <img className="open-ico" src="open.png" />
         </button>
-        <button className="movie-button">
+        <button
+          className="movie-button"
+          onClick={() => browser.tabs.remove(movieObjArr[index].tabID)}
+        >
           <img className="del-ico" src="trash.png" />
         </button>
         <label className="checkmark">
