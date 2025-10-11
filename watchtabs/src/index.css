@@ -101,6 +101,7 @@
   cursor: pointer;
 }
 
+.movie-ico,
 .exp-ico,
 .open-ico,
 .del-ico {
@@ -112,4 +113,7 @@
 .checkmark {
   width: 25px;
   height: 25px;
+}
+
+.movie-expand {
 }

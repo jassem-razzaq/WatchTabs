@@ -2,7 +2,7 @@
 // GOALS
 // -- Seperate handler for each movie link type (IMDB etc.)
 // -- Display extracted movie data in extension list -- DONE
-// -- Enable movie list item buttons (delete, open in new tab -- DONE, select, click and drag)
+// -- Enable movie list item buttons (delete -- DONE , open in new tab -- DONE, expand, select, click and drag)
 // -- Two views, one for current window only, one for all windows
 // -- Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
 // -- Mark tabs in list with colours based on which website detected from (yellow imdb, green letterboxd, etc.)
@@ -14,9 +14,13 @@
 
 // ISSUES:
 // 1. Not opening on Firefox -- FIXED (just works)
+// component for each element inside list element
+// boolean flag initialized to false to display poster
+// when button click onclick flip boolean flag
 //////////////////////////////////////////////
 
 //import { useState, type ReactElement } from "react";
+import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 
 // Regex
@@ -96,21 +100,33 @@ async function titleGrabber() {
   return titleMovieObjArr;
 }
 
-const movieObjArr: Movie[] = await titleGrabber();
-const movieArr: string[] = movieObjArr.map(
-  (movie) => movie.name + " (" + movie.year.toString() + ")"
-);
+// const movieObjArr: Movie[] = await titleGrabber();
+// const movieArr: string[] = movieObjArr.map(
+//   (movie) => movie.name + " (" + movie.year.toString() + ")"
+// );
 
 // function newTabHandler(idx: number) {
 //   console.log(movieObjArr[idx].link);
 // }
 
 function Movie() {
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    async function grabMovieTitles() {
+      const movieTabs = await titleGrabber();
+      setMovies(movieTabs);
+    }
+
+    grabMovieTitles();
+  }, []);
+
   // Return list elements with key as index
-  return movieArr.map((title: string, index: number) => (
-    <li key={index} className="movie-element">
-      <div className="movie-title">{title}</div>
+  return movies.map((movie) => (
+    <li key={movie.tabID} className="movie-element">
+      <div className="movie-title">{movie.name}</div>
       <div className="movie-button-cont">
+        <img className="movie-ico" src="imdb.png"></img>
         <button className="movie-button">
           <img className="exp-ico" src="expand.png" />
         </button>
@@ -119,7 +135,7 @@ function Movie() {
           className="movie-button"
           onClick={() =>
             browser.tabs.create({
-              url: movieObjArr[index].link,
+              url: movie.link,
             })
           }
         >
@@ -127,13 +143,16 @@ function Movie() {
         </button>
         <button
           className="movie-button"
-          onClick={() => browser.tabs.remove(movieObjArr[index].tabID)}
+          onClick={() => browser.tabs.remove(movie.tabID)}
         >
           <img className="del-ico" src="trash.png" />
         </button>
         <label className="checkmark">
-          <input type="checkbox" name="myCheckbox" value={index} />
+          <input type="checkbox" name="myCheckbox" value={movie.tabID} />
         </label>
+      </div>
+      <div className="movie-expand">
+        <img className="movie-poster" src="poster.jpg" />
       </div>
     </li>
   ));
