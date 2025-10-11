@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////
 // GOALS
 // -- Seperate handler for each movie link type (IMDB etc.)
-// -- Display extracted movie data in exension link
+// -- Display extracted movie data in extension list -- DONE
 // -- Enable movie list item buttons (delete, open in new tab, select, click and drag)
 // -- Two views, one for current window only, one for all windows
 // -- Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
@@ -29,6 +29,7 @@ interface Movie {
   name: string;
   year: number;
   link: string;
+  icon: string;
   tabID: number;
 }
 
@@ -46,6 +47,7 @@ async function titleGrabber() {
             name: "Not Found",
             year: 0,
             link: "",
+            icon: "",
             tabID: 0,
           };
 
@@ -69,10 +71,12 @@ async function titleGrabber() {
           }
           // Extract url
           movie.link = tab.url;
-          // Extract tab id
-          if (tab.id) {
-            movie.tabID = tab.id;
-          }
+          // Set icon NEED TO DO
+          if (linkMatch[0])
+            if (tab.id) {
+              // Extract tab id
+              movie.tabID = tab.id;
+            }
           titleMovieObjArr.push(movie);
         }
       }
@@ -113,7 +117,11 @@ function Movie() {
         <button className="movie-button"></button>
         <button
           className="movie-button"
-          onClick={() => console.log(movieObjArr[index].link)}
+          onClick={() =>
+            browser.tabs.create({
+              url: movieObjArr[index].link,
+            })
+          }
         >
           <img className="open-ico" src="open.png" />
         </button>
