@@ -78,11 +78,22 @@
 .movie-element:hover {
   border-color: #646cff;
 }
+
+.movie-title {
+  flex-grow: 1;
+  padding-left: 15px;
+}
+
+.movie-button-cont {
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+}
 .movie-button {
-  width: 25px;
-  height: 20px;
-  padding: 0;
-  background-color: grey;
+  max-width: 20px;
+  max-height: 20px;
+  padding: 0px;
+  background-color: #1a1a1a;
   border: none;
 }
 
@@ -90,8 +101,14 @@
   cursor: pointer;
 }
 
-.movie-cont {
+.open-ico,
+.del-ico {
+  max-width: 20px;
+  max-height: 20px;
+  margin-right: 10px;
 }
 
-.movie-buttons-cont {
+.checkmark {
+  width: 25px;
+  height: 25px;
 }

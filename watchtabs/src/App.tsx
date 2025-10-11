@@ -91,40 +91,29 @@ async function titleGrabber() {
 }
 
 const movieObjArr: Movie[] = await titleGrabber();
-const movieArr: string[] = movieObjArr.map((movie) => movie.name);
+const movieArr: string[] = movieObjArr.map(
+  (movie) => movie.name + " (" + movie.year.toString() + ")"
+);
 
 console.log("raw movies data", movieObjArr);
 console.log("extracted movie names", movieArr);
 
 function Movie() {
   console.log(movieArr);
-  // const movieArr: string[] = [
-  //   "Night of the Day of the Dawn of the Son of the Bride of the Return of the Revenge of the Terror of the Attack of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid (2005)",
-  //   "The Shawshank Redemption (1999)",
-  //   "3 Idiots (2017)",
-  //   "The Matrix (1999)",
-  //   "The Shawshank Redemption (1999)",
-  //   "3 Idiots (2017)",
-  //   "The Matrix (1999)",
-  //   "The Shawshank Redemption (1999)",
-  //   "3 Idiots (2017)",
-  //   "The Matrix (1999)",
-  //   "The Shawshank Redemption (1999)",
-  //   "3 Idiots (2017)",
-  //   "The Matrix (1999)",
-  //   "The Shawshank Redemption (1999)",
-  //   "3 Idiots (2017)",
-  // ];
-
   // Return list elements with key as index
   return movieArr.map((title: string, index: number) => (
     <li key={index} className="movie-element">
       <div className="movie-title">{title}</div>
       <div className="movie-button-cont">
-        <button className="movie-button"></button>
         <button className="movie-button">
-          <img className="del-ico" src="del.svg" />
+          <img className="open-ico" src="open.png" />
         </button>
+        <button className="movie-button">
+          <img className="del-ico" src="trash.png" />
+        </button>
+        <label className="checkmark">
+          <input type="checkbox" name="myCheckbox" value={index} />
+        </label>
       </div>
     </li>
   ));
