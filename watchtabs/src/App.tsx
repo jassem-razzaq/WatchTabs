@@ -74,7 +74,6 @@ async function titleGrabber() {
         }
       }
     }
-    //console.log(movieArr);
   }
 
   function onError(error: unknown) {
@@ -95,16 +94,16 @@ const movieArr: string[] = movieObjArr.map(
   (movie) => movie.name + " (" + movie.year.toString() + ")"
 );
 
-console.log("raw movies data", movieObjArr);
-console.log("extracted movie names", movieArr);
-
 function Movie() {
-  console.log(movieArr);
   // Return list elements with key as index
   return movieArr.map((title: string, index: number) => (
     <li key={index} className="movie-element">
       <div className="movie-title">{title}</div>
       <div className="movie-button-cont">
+        <button className="movie-button">
+          <img className="exp-ico" src="expand.png" />
+        </button>
+        <button className="movie-button"></button>
         <button className="movie-button">
           <img className="open-ico" src="open.png" />
         </button>
