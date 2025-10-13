@@ -35,6 +35,14 @@ interface Movie {
   link: string;
   icon: string;
   tabID: number;
+  isExpanded: boolean;
+}
+
+interface MovieListItemProps {
+  movie: Movie;
+  onOpen: (movie: Movie) => void;
+  onDelete: (movie: Movie) => void;
+  onToggleExpand: (movie: Movie) => void;
 }
 
 // add options for current window or all windows
@@ -53,8 +61,8 @@ async function titleGrabber() {
             link: "",
             icon: "",
             tabID: 0,
+            isExpanded: false,
           };
-
           // Regex match for year and trim length for title
           const yearMatch: RegExpMatchArray | null = tab.title?.match(yearRe);
           const trimMatch: RegExpMatchArray | null = tab.title?.match(trimRe);
@@ -100,14 +108,45 @@ async function titleGrabber() {
   return titleMovieObjArr;
 }
 
-// const movieObjArr: Movie[] = await titleGrabber();
-// const movieArr: string[] = movieObjArr.map(
-//   (movie) => movie.name + " (" + movie.year.toString() + ")"
-// );
+function MovieListItem({
+  movie,
+  onOpen,
+  onDelete,
+  onToggleExpand,
+}: MovieListItemProps) {
+  return (
+    <li key={movie.tabID} className="movie-element">
+      <div className="movie-title">{movie.name}</div>
+      <div className="movie-button-cont">
+        <img className="movie-ico" src="imdb.png" />
 
-// function newTabHandler(idx: number) {
-//   console.log(movieObjArr[idx].link);
-// }
+        <button className="movie-button" onClick={() => onToggleExpand(movie)}>
+          <img className="exp-ico" src="expand.png" />
+        </button>
+
+        <button className="movie-button" onClick={() => onOpen(movie)}>
+          <img className="open-ico" src="open.png" />
+        </button>
+
+        <button className="movie-button" onClick={() => onDelete(movie)}>
+          <img className="del-ico" src="trash.png" />
+        </button>
+
+        <label className="checkmark">
+          <input type="checkbox" name="myCheckbox" value={movie.tabID} />
+        </label>
+      </div>
+      {movie.isExpanded && (
+        <div className="movie-expand">
+          <p>Image</p>
+          <div className="movie-details">
+            <p>This is a short synopsis about the movie</p>
+          </div>
+        </div>
+      )}
+    </li>
+  );
+}
 
 function Movie() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -117,45 +156,38 @@ function Movie() {
       const movieTabs = await titleGrabber();
       setMovies(movieTabs);
     }
-
     grabMovieTitles();
   }, []);
 
-  // Return list elements with key as index
-  return movies.map((movie) => (
-    <li key={movie.tabID} className="movie-element">
-      <div className="movie-title">{movie.name}</div>
-      <div className="movie-button-cont">
-        <img className="movie-ico" src="imdb.png"></img>
-        <button className="movie-button">
-          <img className="exp-ico" src="expand.png" />
-        </button>
-        <button className="movie-button"></button>
-        <button
-          className="movie-button"
-          onClick={() =>
-            browser.tabs.create({
-              url: movie.link,
-            })
-          }
-        >
-          <img className="open-ico" src="open.png" />
-        </button>
-        <button
-          className="movie-button"
-          onClick={() => browser.tabs.remove(movie.tabID)}
-        >
-          <img className="del-ico" src="trash.png" />
-        </button>
-        <label className="checkmark">
-          <input type="checkbox" name="myCheckbox" value={movie.tabID} />
-        </label>
-      </div>
-      <div className="movie-expand">
-        <img className="movie-poster" src="poster.jpg" />
-      </div>
-    </li>
-  ));
+  const handleOpen = (movie: Movie) => {
+    browser.tabs.update(movie.tabID, { active: true });
+  };
+
+  const handleDelete = (movie: Movie) => {
+    setMovies((prev) => prev.filter((m) => m.tabID !== movie.tabID));
+  };
+
+  const handleToggleExpand = (movie: Movie) => {
+    setMovies((prev) =>
+      prev.map((m) =>
+        m.tabID === movie.tabID ? { ...m, isExpanded: !m.isExpanded } : m
+      )
+    );
+  };
+
+  return (
+    <>
+      {movies.map((movie) => (
+        <MovieListItem
+          key={movie.tabID}
+          movie={movie}
+          onOpen={handleOpen}
+          onDelete={handleDelete}
+          onToggleExpand={handleToggleExpand}
+        />
+      ))}
+    </>
+  );
 }
 
 function MovieList() {

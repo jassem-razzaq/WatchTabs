@@ -82,6 +82,7 @@
 .movie-title {
   flex-grow: 1;
   padding-left: 15px;
+  align-items: center;
 }
 
 .movie-button-cont {
@@ -116,4 +117,11 @@
 }
 
 .movie-expand {
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.movie-poster {
+  max-height: 300px;
+  width: auto;
 }
