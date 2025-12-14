@@ -2,12 +2,18 @@
 // GOALS
 // -- Seperate handler for each movie link type (IMDB etc.)
 // -- Display extracted movie data in extension list -- DONE
-// -- Enable movie list item buttons (delete -- DONE , open in new tab -- DONE, expand, select, click and drag)
+// -- Enable movie list item buttons
+//      delete          -- DONE
+//      open in new tab -- DONE
+//      expand          -- DONE
+//      select          -- DONE
+//      click and drag  --
 // -- Two views, one for current window only, one for all windows
 // -- Mark tabs detected as movie tabs but movie could not be found as red in list (clearly imdb or w/e link)
-// -- Mark tabs in list with colours based on which website detected from (yellow imdb, green letterboxd, etc.)
+// -- Show icon of imdb, letterboxd, tmdb or more sites in list item
 // -- Able to save a watchlist in browser storage
 // -- Export watchlist to CSV with movie links
+// -- Use TMDB API through backend to get movie info, posters
 // -- Implement OAuth to sign in to TMDB
 // -- Use TMDB API to create TMDB Watchlist!
 // -- Expand to series, anime etc.
@@ -28,22 +34,34 @@ const yearRe: RegExp = /(\([0-9]{4}\))/g;
 const trimRe: RegExp = /(\([0-9]{4}\)).*/g;
 const linkRe: RegExp =
   /(imdb\.com\/title)|(letterboxd\.com\/film)|(rottentomatoes\.com\/m)|(flickfocus\.com\/movies)|(themoviedb\.org\/movie\/)/g;
+const imdbRe: RegExp = /(imdb\.com\/title)/;
+const tmdbRe: RegExp = /(themoviedb\.org\/movie\/)/;
+const letterboxdRe: RegExp = /(letterboxd\.com\/film)/;
+const rottentomatoesRe: RegExp = /(rottentomatoes\.com\/m)/;
+const flickfocusRe: RegExp = /(flickfocus\.com\/movies)/;
 
-interface Movie {
+// Icons
+const imdbIco: string = "imdb.png";
+const tmbdIco: string = "tmdb.png";
+const letterboxdIco: string = "letterboxd.png";
+const rottentomatoesIco: string = "rottentomatoes.png";
+const flickfocusIco: string = "flickfocus.png";
+
+type Movie = {
   name: string;
   year: number;
   link: string;
   icon: string;
   tabID: number;
   isExpanded: boolean;
-}
+};
 
-interface MovieListItemProps {
+type MovieListItemProps = {
   movie: Movie;
   onOpen: (movie: Movie) => void;
   onDelete: (movie: Movie) => void;
   onToggleExpand: (movie: Movie) => void;
-}
+};
 
 // add options for current window or all windows
 async function titleGrabber() {
@@ -83,7 +101,13 @@ async function titleGrabber() {
           }
           // Extract url
           movie.link = tab.url;
-          // Set icon NEED TO DO
+          // Set icon
+          if (tab.url.match(imdbRe)) movie.icon = imdbIco;
+          else if (tab.url.match(tmdbRe)) movie.icon = tmbdIco;
+          else if (tab.url.match(letterboxdRe)) movie.icon = letterboxdIco;
+          else if (tab.url.match(rottentomatoesRe))
+            movie.icon = rottentomatoesIco;
+          else if (tab.url.match(flickfocusRe)) movie.icon = flickfocusIco;
           if (linkMatch[0])
             if (tab.id) {
               // Extract tab id
@@ -118,7 +142,7 @@ function MovieListItem({
     <li key={movie.tabID} className="movie-element">
       <div className="movie-title">{movie.name}</div>
       <div className="movie-button-cont">
-        <img className="movie-ico" src="imdb.png" />
+        <img className="movie-ico" src={movie.icon} />
 
         <button className="movie-button" onClick={() => onToggleExpand(movie)}>
           <img className="exp-ico" src="expand.png" />
@@ -207,8 +231,12 @@ function App() {
         <h1 className="list-heading">Movies detected in current window</h1>
         <MovieList />
         <div className="export-cont">
-          <button className="CSV">CSV</button>
-          <button className="TMDB">TMDB</button>
+          <button className="CSV" onClick={() => console.log("CSV clicked")}>
+            CSV
+          </button>
+          <button className="TMDB" onClick={() => console.log("TMDB clicked")}>
+            TMDB
+          </button>
         </div>
       </div>
     </>
